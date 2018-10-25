@@ -38,8 +38,8 @@ public class AddressBookServiceImpl implements AddressBookService {
 
 			while ((line = bufferedReader.readLine()) != null) {
 				String[] params = line.split(" ");
-				Date birthDate = new SimpleDateFormat("dd/MM/yyyy").parse(params[3]);
-				this.addressBook.add(new Person(params[0], params[1], params[2], birthDate));
+				Date birthDate = new SimpleDateFormat("dd/MM/yyyy").parse(removeComma(params[3]));
+				this.addressBook.add(new Person(removeComma(params[0]), removeComma(params[1]), removeComma(params[2]), birthDate));
 			}
 
 			bufferedReader.close();
@@ -47,11 +47,19 @@ public class AddressBookServiceImpl implements AddressBookService {
 			logger.error(ex);
 		} catch (FileNotFoundException ex) {
 			logger.error(ex);
+			ex.printStackTrace();
 		} catch (IOException ex) {
 			logger.error(ex);
 		}
 	}
 
+	public String removeComma(String str) {
+	    if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == ',') {
+	        str = str.substring(0, str.length() - 1);
+	    }
+	    return str;
+	}
+	
 	@Override
 	public int malesInAddressBook() {
 		int count = 0;
